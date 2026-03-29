@@ -59,19 +59,6 @@ const Carousel = () => {
     </div>
 
     {/* Botones */}
-    <button
-      className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md p-2 rounded-full shadow-md hover:bg-white"
-      onClick={prevImage}
-    >
-      ‹
-    </button>
-
-    <button
-      className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md p-2 rounded-full shadow-md hover:bg-white"
-      onClick={nextImage}
-    >
-      ›
-    </button>
   </div>
 
   {/* Indicadores */}

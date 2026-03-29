@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from "react";
 
 const Countdown = ({ targetDate }) => {
   const calculateTime = () => {
@@ -9,7 +10,7 @@ const Countdown = ({ targetDate }) => {
       timeLeft = {
         dias: Math.floor(difference / (1000 * 60 * 60 * 24)),
         hora: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutos: Math.floor((difference / 1000 / 60) % 60),
+        min: Math.floor((difference / 1000 / 60) % 60),
         segundos: Math.floor((difference / 1000) % 60),
       };
     }
@@ -27,23 +28,47 @@ const Countdown = ({ targetDate }) => {
   }, [timeLeft]);
 
   return (
-    <section>
-      <div className="p-2 sm:text-lg md:text-4xl lg:text-5xl text-black flex flex-col items-center rounded-lg font-playfair">
-        <div className="flex space-x-10">
-          {Object.keys(timeLeft).map((interval) => (
-            <div key={interval} className="flex flex-col items-center gap-2">
-              {/* Estilo para los números */}
-              <span className="bg-[#9E8E7B] text-white font-bold p-2 w-12 h-12 rounded-full text-2xl flex items-center justify-center">
-                {timeLeft[interval]}
-              </span>
-              {/* Estilo para las etiquetas (días, horas, minutos, segundos) */}
-              <span className="text-white capitalize">{interval}</span>
-            </div>
-          ))}
-        </div>
-        {Object.keys(timeLeft).length === 0 && <span>Time's up!</span>}
-      </div>
-    </section>
+   <section>
+  <div className="p-2 text-black flex flex-col items-center font-playfair">
+
+    <div className="flex items-center">
+
+      {Object.keys(timeLeft).map((interval, index) => (
+        <React.Fragment key={interval}>
+
+          {/* BLOQUE */}
+          <div className="flex flex-col items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-3 rounded-xl min-w-[80px]">
+
+            {/* NÚMERO */}
+            <span className="text-white font-bold text-3xl sm:text-4xl md:text-5xl">
+              {timeLeft[interval]}
+            </span>
+
+            {/* LABEL */}
+            <span className="text-white uppercase tracking-widest text-xs sm:text-sm opacity-80">
+              {interval}
+            </span>
+
+          </div>
+
+          {/* ":" SOLO SI NO ES EL ÚLTIMO */}
+          {index < Object.keys(timeLeft).length - 1 && (
+            <span className="mx-2 text-3xl sm:text-4xl text-[#9E8E7B] opacity-80">
+              :
+            </span>
+          )}
+
+        </React.Fragment>
+      ))}
+
+    </div>
+
+    {Object.keys(timeLeft).length === 0 && (
+      <span className="text-white mt-4">Time's up!</span>
+    )}
+
+  </div>
+</section>
   );
 };
 

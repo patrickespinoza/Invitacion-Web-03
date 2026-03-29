@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 import Carousel from "./carrusel";
-import Countdown from "./componentes-encabezado/encabeza-cuenta";
 import { motion, AnimatePresence } from "framer-motion";
+import Itinerario from "./Itinerario";
 
 
-export default function Intinerario() {
+export default function PaginaPrincipal() {
   // Estados para manejar el formulario
+  const fadeUp = {
+  hidden: { opacity: 0, y: 80 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+    },
+  },
+};
   const[mostraModal, setMostrarModal] = useState(false)
   const [copiado, setCopiado] = useState(false);
   const copiarCuenta = () => {
@@ -72,42 +82,121 @@ ${mensajeInvitado || "Sin mensaje"}
   }
 };
 
+
   return (
     <div >
 
-      <div className="relative flex flex-col items-center justify-center text-white bg-black py-20 px-6 text-center overflow-hidden">
+      <motion.div
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="relative flex flex-col items-center justify-center text-white bg-gradient-to-b from-[#0f0f0f] via-[#1a1a1a] to-black py-24 px-6 text-center overflow-hidden"
+>
 
   {/* Glow decorativo sutil */}
   <div className="absolute w-[500px] h-[500px] bg-[#9E8E7B]/20 rounded-full blur-3xl top-[-100px]"></div>
+  
 
   {/* Contenido */}
   <div className="relative z-10 max-w-3xl">
 
-    <h1 className="text-3xl sm:text-5xl md:text-6xl font-cursiveDancing mb-6 leading-tight">
-      ¡Estás invitado!
-    </h1>
-
-    <p className="text-lg sm:text-2xl md:text-3xl opacity-90 mb-6">
-      Nos encantaría que seas parte de este momento tan especial para nosotros
+    <p className="text-base sm:text-xl md:text-2xl text-gray-300 leading-relaxed mb-8">
+      "El amor no mira con los ojos, sino con la mente, y por eso al alado Cupido lo pintan ciego."
     </p>
 
     {/* Línea elegante */}
-    <div className="w-20 h-[2px] bg-[#9E8E7B] mx-auto my-6"></div>
+    <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#9E8E7B] to-transparent mx-auto my-8"></div>
 
-    <p className="text-xl sm:text-3xl italic opacity-80">
-      ¡Falta poco!
+    <p className="text-sm tracking-[0.3em] text-[#9E8E7B] uppercase">
+  William Shakespeare
+</p>
+
+  </div>
+</motion.div>
+
+
+{/* Direccion del evento*/}
+
+        <motion.div
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="flex items-center justify-center p-6 bg-gradient-to-b from-black via-[#1a1a1a] to-black"
+>
+  <div className="bg-white/10  p-10 md:p-12 max-w-lg md:max-w-xl min-h-[400px] md:min-h-[450px] w-full text-center space-y-6 md:space-y-8 transition duration-300 hover:scale-105">
+    
+    <h1 className="text-sm tracking-[0.3em] text-[#9E8E7B] font-semibold">
+  ¿CUÁNDO?
+   </h1>
+
+     <div>
+      <p className="text-6xl">📅</p>
+      <p className="text-lg text-gray-300 tracking-wid">DOMINGO, 11 DE JUNIO</p>
+      <div className="w-24 h-[1px] bg-white/20 mx-auto"></div>
+      <p className="text-5xl fond-bold text-white">2026</p>
+
+      <p className="text-lg text-gray-300 tracking-wide">16:30 </p>
+    </div>
+
+    <a
+      href="https://maps.app.goo.gl/TsSDUBKAractwi8F8"
+      target="_blank"
+      className="inline-block mt-4 bg-[#9E8E7B] hover:bg-[#8a7a69] text-white px-6 py-3 rounded-full shadow-md transition duration-300"
+    >
+      Ver ubicación
+    </a>
+    <div className="w-24 h-[1px] bg-white/20 mx-auto"></div>
+  </div>
+</motion.div>
+
+        {/* Sección de Momentos */}
+        <motion.div
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="flex items-center justify-center py-12 bg-gray-50"
+>
+  <div className="max-w-4xl w-full text-center space-y-6">
+
+    {/* Título */}
+    <h1 className="text-2xl sm:text-4xl font-bold font-playfair tracking-wide">
+      Nuestros Historia
+    </h1>
+
+    {/* Línea decorativa */}
+    <div className="w-20 h-[2px] bg-[#9E8E7B] mx-auto"></div>
+
+    {/* Subtexto */}
+    <p className="text-gray-500 text-sm sm:text-base">
+      Un vistazo a nuestra historia juntos 💛
     </p>
 
+    {/* Carrusel dentro de card */}
+    <div className="bg-white rounded-3xl shadow-xl p-4 sm:p-6 flex justify-center">
+  <div className="w-full max-w-xl">
+    <Carousel />
   </div>
 </div>
 
-{/* COUNTDOWN separado pero integrado */}
-<div className="bg-black pb-20 flex justify-center">
-  <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl px-8 py-6 shadow-xl">
-    <Countdown targetDate="2026-06-11T00:00:00" />
+  </div>
+</motion.div>
+
+<div className="bg-white rounded-3xl shadow-xl p-4 sm:p-6 flex justify-center">
+  <div className="w-full max-w-xl">
+    <Itinerario />
   </div>
 </div>
-        <div className="relative w-full h-[450px] md:h-[550px] lg:h-[700px] overflow-hidden">
+{/* imagen de separacion*/}
+        <motion.div
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="relative w-full h-[450px] md:h-[550px] lg:h-[700px] overflow-hidden"
+>
 
   <img
     src="/bajotime.avif"
@@ -118,41 +207,17 @@ ${mensajeInvitado || "Sin mensaje"}
   {/* Fade blanco abajo */}
   <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent"></div>
 
-</div>
-
+</motion.div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2  ">
-        <div className="flex items-center justify-center p-6">
-  <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center space-y-4 hover:scale-105 transition duration-300">
-    
-    <h1 className="text-2xl sm:text-3xl font-bold font-playfair tracking-wide">
-      CELEBRACIÓN
-    </h1>
-
-    <div className="text-lg font-cursiveDancing space-y-1">
-      <p>📅 11 Junio 2026</p>
-      <p>⏰ 4:30 PM</p>
-    </div>
-
-    <div className="border-t border-gray-200 pt-4 space-y-2">
-      <p className="font-semibold text-lg">Ubicacion</p>
-      <p className="font-semibold text-lg">📍 Salón Event Center</p>
-      <p className="text-sm text-gray-600">
-        C.5 Pte. 400, Libertad, Heroica Puebla de Zaragoza, Pue
-      </p>
-    </div>
-
-    <a
-      href="https://maps.app.goo.gl/TsSDUBKAractwi8F8"
-      target="_blank"
-      className="inline-block mt-4 bg-[#9E8E7B] hover:bg-[#8a7a69] text-white px-6 py-3 rounded-full shadow-md transition duration-300"
-    >
-      Ver ubicación
-    </a>
-  </div>
-</div>
 
         {/* Sección de Vestimenta */}
-        <div className="flex items-center justify-center p-6 bg-black">
+        <motion.div
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="flex items-center justify-center p-6 bg-black"
+>
   <div className="bg-white/10 backdrop-blur-md rounded-3xl shadow-xl p-8 max-w-md w-full text-center space-y-4 text-white">
     
     <h1 className="text-2xl sm:text-4xl font-bold font-playfair tracking-wide">
@@ -195,37 +260,18 @@ ${mensajeInvitado || "Sin mensaje"}
 
 
   </div>
-</div>
+</motion.div>
 
-        {/* Sección de Momentos */}
-        <div className="flex items-center justify-center py-12 bg-gray-50">
-  <div className="max-w-4xl w-full text-center space-y-6">
-
-    {/* Título */}
-    <h1 className="text-2xl sm:text-4xl font-bold font-playfair tracking-wide">
-      Nuestros Momentos
-    </h1>
-
-    {/* Línea decorativa */}
-    <div className="w-20 h-[2px] bg-[#9E8E7B] mx-auto"></div>
-
-    {/* Subtexto */}
-    <p className="text-gray-500 text-sm sm:text-base">
-      Un vistazo a nuestra historia juntos 💛
-    </p>
-
-    {/* Carrusel dentro de card */}
-    <div className="bg-white rounded-3xl shadow-xl p-4 sm:p-6 flex justify-center">
-  <div className="w-full max-w-xl">
-    <Carousel />
-  </div>
-</div>
-
-  </div>
-</div>
 
         {/* Sección de Regalos */}
-  <div className="flex flex-col items-center justify-center gap-3 h-96 md:h-80 lg:h-[700px]">
+        <motion.div
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="flex flex-col items-center justify-center gap-3 h-96 md:h-80 lg:h-[700px]"
+>
+  
   <img className="h-24 w-24 sm:h-28 sm:w-28 p-3" src="/regalo1.png" alt="Regalo" />
   <h1 className="text-xl sm:text-2xl font-bold p-3 font-playfair">REGALOS</h1>
   <p className="text-lg sm:text-xl p-7 text-center ">Ya tenemos pensado el ferrari, la mansion y el velero. Ahora lo unico que nos falta es el dinero</p>
@@ -312,11 +358,17 @@ ${mensajeInvitado || "Sin mensaje"}
     </motion.div>
   )}
 </AnimatePresence>
-</div>
+</motion.div>
 
 {/* Sección de Confirmación de Asistencia */}
 
-<div className="relative w-full flex justify-center items-center py-16 bg-black overflow-hidden">
+<motion.div
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="relative w-full flex justify-center items-center py-16 bg-black overflow-hidden"
+>
 
   {/* Fondo con blur */}
   <img
@@ -343,8 +395,14 @@ ${mensajeInvitado || "Sin mensaje"}
     </p>
 
   </div>
-</div>
-<div className="flex flex-col items-center justify-center gap-4 h-auto py-10 bg-gray-50 rounded-2xl shadow-md">
+</motion.div>
+<motion.div
+  variants={fadeUp}
+  initial="hidden"
+  whileInView="show"
+  viewport={{ once: true }}
+  className="flex flex-col items-center justify-center gap-4 h-auto py-10 bg-gray-50 rounded-2xl shadow-md"
+>
   <h1 className="text-xl sm:text-2xl font-bold font-playfair">
     CONFIRMAR ASISTENCIA
   </h1>
@@ -414,7 +472,7 @@ ${mensajeInvitado || "Sin mensaje"}
 >
   Enviar Confirmación
 </button>
-</div>
+</motion.div>
 
       </div>      
     </div>
