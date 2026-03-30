@@ -9,9 +9,9 @@ const Countdown = ({ targetDate }) => {
     if (difference > 0) {
       timeLeft = {
         dias: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hora: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        horas: Math.floor((difference / (1000 * 60 * 60)) % 24),
         min: Math.floor((difference / 1000 / 60) % 60),
-        segundos: Math.floor((difference / 1000) % 60),
+        seg: Math.floor((difference / 1000) % 60),
       };
     }
     return timeLeft;
@@ -28,47 +28,70 @@ const Countdown = ({ targetDate }) => {
   }, [timeLeft]);
 
   return (
-   <section>
-  <div className="p-2 text-black flex flex-col items-center font-playfair">
+    <section className="w-full flex justify-center">
+      <div className="font-playfair w-full max-w-md">
 
-    <div className="flex items-center">
+        {/* GRID RESPONSIVE */}
+        <div className="
+          grid grid-cols-2 gap-3
+          sm:flex sm:justify-center sm:items-center sm:gap-4
+        ">
 
-      {Object.keys(timeLeft).map((interval, index) => (
-        <React.Fragment key={interval}>
+          {Object.keys(timeLeft).map((interval, index) => (
+            <React.Fragment key={interval}>
 
-          {/* BLOQUE */}
-          <div className="flex flex-col items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-3 rounded-xl min-w-[80px]">
+              {/* BLOQUE */}
+              <div className="
+                flex flex-col items-center justify-center
+                bg-white/10 backdrop-blur-md
+                px-3 py-3 sm:px-4 sm:py-3
+                rounded-xl
+                min-w-[70px] sm:min-w-[80px]
+              ">
 
-            {/* NÚMERO */}
-            <span className="text-white font-bold text-3xl sm:text-4xl md:text-5xl">
-              {timeLeft[interval]}
-            </span>
+                {/* NÚMERO */}
+                <span className="
+                  text-white font-bold
+                  text-2xl sm:text-3xl md:text-4xl lg:text-5xl
+                ">
+                  {timeLeft[interval]}
+                </span>
 
-            {/* LABEL */}
-            <span className="text-white uppercase tracking-widest text-xs sm:text-sm opacity-80">
-              {interval}
-            </span>
+                {/* LABEL */}
+                <span className="
+                  text-white uppercase tracking-widest
+                  text-[10px] sm:text-xs md:text-sm
+                  opacity-80
+                ">
+                  {interval}
+                </span>
 
-          </div>
+              </div>
 
-          {/* ":" SOLO SI NO ES EL ÚLTIMO */}
-          {index < Object.keys(timeLeft).length - 1 && (
-            <span className="mx-2 text-3xl sm:text-4xl text-[#9E8E7B] opacity-80">
-              :
-            </span>
-          )}
+              {/* ":" SOLO EN DESKTOP */}
+              {index < Object.keys(timeLeft).length - 1 && (
+                <span className="
+                  hidden sm:block
+                  text-2xl md:text-3xl
+                  text-[#9E8E7B] opacity-80
+                ">
+                  :
+                </span>
+              )}
 
-        </React.Fragment>
-      ))}
+            </React.Fragment>
+          ))}
+        </div>
 
-    </div>
+        {/* FINAL */}
+        {Object.keys(timeLeft).length === 0 && (
+          <span className="text-white mt-4 text-center block">
+            ¡Llegó el gran día! 🎉
+          </span>
+        )}
 
-    {Object.keys(timeLeft).length === 0 && (
-      <span className="text-white mt-4">Time's up!</span>
-    )}
-
-  </div>
-</section>
+      </div>
+    </section>
   );
 };
 
