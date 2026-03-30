@@ -29,13 +29,10 @@ const Countdown = ({ targetDate }) => {
 
   return (
     <section className="w-full flex justify-center">
-      <div className="font-playfair w-full max-w-md">
+      <div className="font-playfair w-full max-w-md px-2">
 
-        {/* GRID RESPONSIVE */}
-        <div className="
-          grid grid-cols-2 gap-3
-          sm:flex sm:justify-center sm:items-center sm:gap-4
-        ">
+        {/* FLEX SIEMPRE EN LÍNEA */}
+        <div className="flex justify-between items-center gap-2">
 
           {Object.keys(timeLeft).map((interval, index) => (
             <React.Fragment key={interval}>
@@ -44,15 +41,15 @@ const Countdown = ({ targetDate }) => {
               <div className="
                 flex flex-col items-center justify-center
                 bg-white/10 backdrop-blur-md
-                px-3 py-3 sm:px-4 sm:py-3
+                px-2 py-2 sm:px-3 sm:py-3
                 rounded-xl
-                min-w-[70px] sm:min-w-[80px]
+                flex-1
               ">
 
                 {/* NÚMERO */}
                 <span className="
                   text-white font-bold
-                  text-2xl sm:text-3xl md:text-4xl lg:text-5xl
+                  text-xl sm:text-2xl md:text-4xl
                 ">
                   {timeLeft[interval]}
                 </span>
@@ -60,7 +57,7 @@ const Countdown = ({ targetDate }) => {
                 {/* LABEL */}
                 <span className="
                   text-white uppercase tracking-widest
-                  text-[10px] sm:text-xs md:text-sm
+                  text-[9px] sm:text-xs
                   opacity-80
                 ">
                   {interval}
@@ -68,11 +65,10 @@ const Countdown = ({ targetDate }) => {
 
               </div>
 
-              {/* ":" SOLO EN DESKTOP */}
+              {/* ":" */}
               {index < Object.keys(timeLeft).length - 1 && (
                 <span className="
-                  hidden sm:block
-                  text-2xl md:text-3xl
+                  text-lg sm:text-2xl
                   text-[#9E8E7B] opacity-80
                 ">
                   :
