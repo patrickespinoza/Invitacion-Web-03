@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import Confetti from "react-confetti";
 import html2canvas from "html2canvas";
 
-// 🔥 USA SOLO UNA URL
+// 🔥 URL GOOGLE SHEETS
 const API_URL = "https://script.google.com/macros/s/AKfycbxQTHIUXU3wWSw_mg7wvwbjwLbzskGcgGaGKzuY_yUK1r-RfPfXtSB7WD4CfZ6W7f5QJg/exec";
 
 const preguntas = [
@@ -36,45 +36,74 @@ const preguntas = [
 
 const Preguntas = () => {
   const [nombre, setNombre] = useState("");
-  const [iniciado, setIniciado] = useState(false);
+  const [mostrarNombre, setMostrarNombre] = useState(true);
   const [paso, setPaso] = useState(0);
   const [seleccion, setSeleccion] = useState(null);
   const [score, setScore] = useState(0);
   const [terminado, setTerminado] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
   const [ranking, setRanking] = useState([]);
-  const [enviado, setEnviado] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const resultadoRef = useRef();
 
   // 📤 enviar resultado
-  const enviarResultado = async (nombre, score) => {
+const enviarResultado = async () => {
+  try {
     await fetch(API_URL, {
       method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre, score })
+      mode: "no-cors", // ✅ IMPORTANTE
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nombre: nombre,
+        score: score
+      })
     });
-  };
+  } catch (e) {
+    console.log("Error enviando:", e);
+  }
+};
 
   // 📥 obtener ranking
   const obtenerRanking = async () => {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    setRanking(data);
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+
+      const ordenado = data.sort((a, b) => b.score - a.score);
+      setRanking(ordenado.slice(0, 3));
+    } catch (e) {
+      console.log("Error ranking:", e);
+    }
   };
 
-  // 🔥 enviar solo una vez
+  // 🔥 flujo final (TIEMPO REAL)
   useEffect(() => {
-    if (terminado && !enviado) {
-      enviarResultado(nombre, score);
-      obtenerRanking();
-      setEnviado(true);
+    if (terminado) {
+      const flujoFinal = async () => {
+        await enviarResultado();
+
+        // ⏳ esperar a que Google Sheets guarde
+        setTimeout(async () => {
+          await obtenerRanking();
+        }, 1200);
+
+        // 🎉 confetti seguro
+        setShowConfetti(true);
+      };
+
+      flujoFinal();
     }
   }, [terminado]);
 
-  // 🎯 lógica respuesta
+  // 🎯 lógica respuestas
   const manejarRespuesta = (index) => {
+    if (paso === 0 && !nombre.trim()) {
+      alert("Escribe tu nombre 😊");
+      return;
+    }
+
     setSeleccion(index);
 
     if (index === preguntas[paso].correcta) {
@@ -84,13 +113,14 @@ const Preguntas = () => {
     setTimeout(() => {
       setSeleccion(null);
 
+      if (paso === 0) setMostrarNombre(false);
+
       if (paso + 1 < preguntas.length) {
         setPaso(paso + 1);
       } else {
         setTerminado(true);
-        setShowConfetti(true);
       }
-    }, 800);
+    }, 700);
   };
 
   // 📸 guardar imagen
@@ -103,123 +133,111 @@ const Preguntas = () => {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center relative">
       <div className="w-full max-w-xl">
 
-        {!iniciado ? (
-          <div className="flex flex-col items-center gap-4 py-10">
-            <h2 className="text-xl font-bold">Ingresa tu nombre</h2>
-
-            <input
-              type="text"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              placeholder="Tu nombre..."
-              className="px-4 py-2 border rounded-lg w-72"
-            />
-
-            <button
-              onClick={() => {
-                if (!nombre.trim()) return alert("Pon tu nombre 😅");
-                setIniciado(true);
-              }}
-              className="px-6 py-2 bg-[#9E8E7B] text-white rounded-full"
-            >
-              Comenzar
-            </button>
-          </div>
-        ) : (
-          <>
-            {showConfetti && <Confetti />}
-
-            <AnimatePresence mode="wait">
-              {!terminado ? (
-                <motion.div
-                  key={paso}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -50 }}
-                  className="flex flex-col items-center gap-5 py-10 bg-gray-50 rounded-2xl shadow-md"
-                >
-                  <h1 className="text-2xl font-bold">¿CUÁNTO NOS CONOCES?</h1>
-
-                  <p className="text-blue-400">
-                    PREGUNTA {paso + 1} DE {preguntas.length}
-                  </p>
-
-                  <h2>{preguntas[paso].pregunta}</h2>
-
-                  <div className="flex flex-col gap-3 w-full items-center">
-                    {preguntas[paso].opciones.map((opcion, index) => (
-                      <button
-                        key={index}
-                        onClick={() => manejarRespuesta(index)}
-                        className={`w-80 px-4 py-3 rounded-xl border transition-all
-                        ${seleccion === index
-                            ? "bg-pink-400 text-white scale-105"
-                            : "bg-white hover:bg-pink-100"}`}
-                      >
-                        {opcion}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  ref={resultadoRef}
-                  className="flex flex-col items-center gap-6 py-10 bg-white rounded-2xl shadow-xl"
-                >
-                  <h2 className="text-2xl font-bold">
-                    🎉 {nombre}, este es tu resultado
-                  </h2>
-
-                  <p>
-                    Acertaste <b>{score}</b> de {preguntas.length}
-                  </p>
-
-                  <button
-                    onClick={guardarResultado}
-                    className="px-6 py-2 bg-green-500 text-white rounded-full"
-                  >
-                    📸 Guardar resultado
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setPaso(0);
-                      setScore(0);
-                      setTerminado(false);
-                      setShowConfetti(false);
-                      setSeleccion(null);
-                      setEnviado(false);
-                    }}
-                    className="px-6 py-2 bg-[#9E8E7B] text-white rounded-full"
-                  >
-                    Reintentar
-                  </button>
-
-                  {/* 🏆 ranking */}
-                  <div className="w-full mt-6">
-                    <h3 className="text-lg font-bold text-center mb-3">
-                      🏆 Ranking
-                    </h3>
-
-                    {ranking.slice(0, 5).map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex justify-between bg-gray-100 px-4 py-2 rounded-lg mb-2"
-                      >
-                        <span>{index + 1}. {item.nombre}</span>
-                        <span>{item.score}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </>
+        {/* 🎉 CONFETTI FIX */}
+        {showConfetti && (
+          <Confetti
+            width={window.innerWidth}
+            height={window.innerHeight}
+            numberOfPieces={300}
+            recycle={false}
+          />
         )}
+
+        <AnimatePresence mode="wait">
+          {!terminado ? (
+            <motion.div
+              key={paso}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              className="flex flex-col items-center gap-5 py-10 bg-gray-50 rounded-2xl shadow-md"
+            >
+              <h1 className="text-2xl font-bold">¿CUÁNTO NOS CONOCES?</h1>
+
+              <p className="text-blue-400">
+                PREGUNTA {paso + 1} DE {preguntas.length}
+              </p>
+
+              {mostrarNombre && (
+                <input
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  placeholder="Tu nombre..."
+                  className="px-4 py-2 border rounded-lg w-72 text-center"
+                />
+              )}
+
+              <h2>{preguntas[paso].pregunta}</h2>
+
+              <div className="flex flex-col gap-3 w-full items-center">
+                {preguntas[paso].opciones.map((opcion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => manejarRespuesta(index)}
+                    className={`w-80 px-4 py-3 rounded-xl border transition-all
+                      ${seleccion === index
+                        ? "bg-pink-400 text-white scale-105"
+                        : "bg-white hover:bg-pink-100"}`}
+                  >
+                    {opcion}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              ref={resultadoRef}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center gap-6 py-10 bg-white rounded-2xl shadow-xl"
+            >
+              <h2 className="text-2xl font-bold">
+                🎉 {nombre}, acertaste {score} de {preguntas.length}
+              </h2>
+
+              {/* 🏆 PODIO TIEMPO REAL */}
+              <div className="flex items-end justify-center gap-4 mt-6">
+
+                {ranking[1] && (
+                  <motion.div initial={{ y: 50 }} animate={{ y: 0 }}>
+                    <div className="bg-gray-300 h-24 w-20 rounded-t-xl flex items-center justify-center">2</div>
+                    <p>{ranking[1].nombre}</p>
+                    <span>{ranking[1].score}</span>
+                  </motion.div>
+                )}
+
+                {ranking[0] && (
+                  <motion.div initial={{ y: 80 }} animate={{ y: 0 }}>
+                    <div className="bg-yellow-400 h-32 w-24 rounded-t-xl flex items-center justify-center">🏆</div>
+                    <p className="font-bold">{ranking[0].nombre}</p>
+                    <span>{ranking[0].score}</span>
+                  </motion.div>
+                )}
+
+                {ranking[2] && (
+                  <motion.div initial={{ y: 50 }} animate={{ y: 0 }}>
+                    <div className="bg-orange-300 h-20 w-20 rounded-t-xl flex items-center justify-center">3</div>
+                    <p>{ranking[2].nombre}</p>
+                    <span>{ranking[2].score}</span>
+                  </motion.div>
+                )}
+
+              </div>
+
+              <button
+                onClick={guardarResultado}
+                className="px-6 py-2 bg-green-500 text-white rounded-full"
+              >
+                📸 Guardar resultado
+              </button>
+
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

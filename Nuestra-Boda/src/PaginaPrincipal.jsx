@@ -3,7 +3,8 @@ import Carousel from "./carrusel";
 import { motion, AnimatePresence } from "framer-motion";
 import Itinerario from "./Itinerario";
 import Preguntas from "./Preguntas";
-
+import Regalos from "./componentes-encabezado/Regalos";
+import Confirmacion from "./componentes-encabezado/Confirmacion";
 
 
 export default function PaginaPrincipal() {
@@ -33,61 +34,7 @@ export default function PaginaPrincipal() {
     setCopiado(false);
   }, 2000);
 };
-  const [nombreInvitado, setNombreInvitado] = useState("");
-  const [mensajeInvitado, setMensajeInvitado] = useState("");
-  const [asistencia, setAsistencia] = useState("");
-  const [invitados, setInvitados] = useState(1);
-  const [error, setError] = useState("");
-  const enviarConfirmacion = async () => {
-  if (!nombreInvitado || !asistencia) {
-    setError("Completa tu nombre y confirma asistencia");
-    return;
-  }
-
-  setError("");
-
-  const data = {
-    nombre: nombreInvitado,
-    asistencia,
-    invitados,
-    mensaje: mensajeInvitado,
-  };
-
-  try {
-    // 🔥 GUARDAR EN GOOGLE SHEETS
-    await fetch("https://script.google.com/macros/s/AKfycbxklU9PTlqxkcu9pBUfWYhByQZ_7kJWuFENeeQhlEW-C6eh2cVbTK3z2AbMJiWVL1ME/exec", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-
-    // 📱 WHATSAPP
-    const numero = "522214105012";
-
-    const mensaje = `✨ Confirmación de asistencia ✨
-
-Nombre: ${nombreInvitado}
-Asistencia: ${asistencia}
-Invitados: ${invitados}
-
-Mensaje:
-${mensajeInvitado || "Sin mensaje"}
-
-¡Nos vemos en la boda! 💍🎉`;
-
-    const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
-    window.open(url, "_blank");
-
-    // 🧹 RESET
-    setNombreInvitado("");
-    setMensajeInvitado("");
-    setAsistencia("");
-    setInvitados(1);
-
-  } catch (error) {
-    console.error("Error:", error);
-    setError("Hubo un error al enviar");
-  }
-};
+  
 
 
 
@@ -218,7 +165,7 @@ ${mensajeInvitado || "Sin mensaje"}
 
   {/* Partículas flotantes */}
   <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-    {Array.from({ length: 200 }).map((_, i) => (
+    {Array.from({ length: 10 }).map((_, i) => (
       <div
         key={i}
         className="absolute bg-red-400/75 rounded-full blur-sm"
@@ -447,125 +394,15 @@ ${mensajeInvitado || "Sin mensaje"}
 </div>
      
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2  ">
-{/* imagen de separacion*/}
-        <motion.div
-  variants={fadeUp}
-  initial="hidden"
-  whileInView="show"
-  viewport={{ once: true }}
-  className="relative w-full h-[450px] md:h-[550px] lg:h-[700px] overflow-hidden"
->
-
-  <img
-    src="/bajotime.avif"
-    alt="Decoración"
-    className="w-full h-full object-cover object-center"
-  />
-  {/* Fade blanco abajo */}
-  <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent"></div>
-</motion.div>
-
-
-
  {/* Sección de Regalos */}
-        <motion.div
-  variants={fadeUp}
-  initial="hidden"
-  whileInView="show"
-  viewport={{ once: true }}
-  className="flex flex-col items-center justify-center gap-3 h-96 md:h-80 lg:h-[700px]"
->
-  
-  <img className="h-24 w-24 sm:h-28 sm:w-28 p-3" src="/regalo1.png" alt="Regalo" />
-  <h1 className="text-xl sm:text-2xl font-bold p-3 font-playfair">REGALOS</h1>
-  <p className="text-lg sm:text-xl p-7 text-center ">Ya tenemos pensado el ferrari, la mansion y el velero. Ahora lo unico que nos falta es el dinero</p>
+<div className="bg-white rounded-3xl shadow-xl p-4 sm:p-6 flex justify-center">
+  <div className="w-full max-w-xl">
+    <Regalos/>
+  </div>
+</div>
+     
 
-  {/* Botón para ver datos bancarios*/}
-  <button 
-    className="bg-[#9E8E7B] rounded-md p-3 w-96 h-14 flex items-center justify-center text-xl text-white "
-    onClick={() => setMostrarModal(true)}
-  >
-    Ver Datos Bancarios
-  </button>
-<AnimatePresence>
-  {mostrarModal && (
-    <motion.div
-      className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50"
-      onClick={() => setMostrarModal(false)}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <motion.div
-        className="relative w-80 h-56 rounded-2xl p-5 text-white overflow-hidden shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-        initial={{ scale: 0.8, opacity: 0, y: 80 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.8, opacity: 0, y: 80 }}
-        transition={{ duration: 0.4 }}
-        style={{
-          background: "linear-gradient(135deg, #9E8E7B, #5f564c)",
-        }}
-      >
-        {/* ✨ Brillo animado */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-30 animate-[shine_3s_infinite]" />
-
-        {/* 🏦 Logo banco */}
-        <div className="flex justify-between items-center">
-          <h2 className="text-sm tracking-widest">SANTANDER</h2>
-          <span className="text-xs opacity-70">VISA</span>
-        </div>
-
-        {/* 💳 Chip */}
-        <div className="w-10 h-7 bg-yellow-300 rounded-md mt-4 shadow-inner"></div>
-
-        {/* 🔢 Número */}
-        <p className="text-lg tracking-[0.2em] mt-6">
-          1234 5678 9012 3456
-        </p>
-
-        {/* 👤 Nombre + fecha */}
-        <div className="flex justify-between items-end mt-4 text-xs">
-          <div>
-            <p className="opacity-70">Card Holders</p>
-            <p className="text-sm tracking-wide">JUAN PEREZ</p>
-          </div>
-          <div>
-            <p className="opacity-70">VALID THRU</p>
-            <p>06/20</p>
-          </div>
-        </div>
-
-        {/* 📋 Botón copiar */}
-        <button
-          onClick={copiarCuenta}
-          className="mt-4 w-full bg-white text-black py-1 rounded-md text-xs font-semibold hover:opacity-80 transition"
-        >
-          📋 Copiar número
-        </button>
-
-        {/* ✅ Feedback */}
-        {copiado && (
-          <p className="absolute bottom-10 left-0 right-0 text-center text-green-200 text-xs">
-            ✅ Copiado
-          </p>
-        )}
-
-        {/* ❌ Cerrar */}
-        <button
-          className="absolute top-1 right-3 text-white text-lg"
-          onClick={() => setMostrarModal(false)}
-        >
-          ✕
-        </button>
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
-</motion.div>
-
-{/* Sección de Confirmación de Asistencia */}
+{/* Sección de imagen de separacion */}
 
 <motion.div
   variants={fadeUp}
@@ -602,85 +439,13 @@ ${mensajeInvitado || "Sin mensaje"}
   </div>
 </motion.div>
 
-<motion.div
-  variants={fadeUp}
-  initial="hidden"
-  whileInView="show"
-  viewport={{ once: true }}
-  className="flex flex-col items-center justify-center gap-4 h-auto py-10 bg-gray-50 rounded-2xl shadow-md"
->
-  <h1 className="text-xl sm:text-2xl font-bold font-playfair">
-    CONFIRMAR ASISTENCIA
-  </h1>
-
-  <p>Por favor, confirma tu asistencia</p>
-
-  {/* Nombre */}
-  <input
-    type="text"
-    placeholder="Nombre y apellido"
-    value={nombreInvitado}
-    onChange={(e) => setNombreInvitado(e.target.value)}
-    className="w-80 p-3 border rounded-lg focus:ring-2 focus:ring-[#9E8E7B]"
-  />
-
-  {/* Asistencia */}
-  <div className="flex gap-4">
-    <button
-      onClick={() => setAsistencia("Sí asistiré")}
-      className={`px-4 py-2 rounded-lg border ${
-        asistencia === "Sí asistiré"
-          ? "bg-green-500 text-white"
-          : "bg-white"
-      }`}
-    >
-      ✅ Asistiré
-    </button>
-
-    <button
-      onClick={() => setAsistencia("No podré asistir")}
-      className={`px-4 py-2 rounded-lg border ${
-        asistencia === "No podré asistir"
-          ? "bg-red-500 text-white"
-          : "bg-white"
-      }`}
-    >
-      ❌ No asistiré
-    </button>
+{/* Sección de Confirmación de Asistencia */}
+<div className="bg-white rounded-3xl shadow-xl p-4 sm:p-6 flex justify-center">
+  <div className="w-full max-w-xl">
+    <Confirmacion/>
   </div>
-
-  {/* Número de invitados */}
-  <input
-    type="number"
-    min="1"
-    value={invitados}
-    onChange={(e) => setInvitados(e.target.value)}
-    className="w-80 p-3 border rounded-lg text-center"
-  />
-
-  {/* Mensaje */}
-  <textarea
-    placeholder="Mensaje para los novios (opcional)"
-    value={mensajeInvitado}
-    onChange={(e) => setMensajeInvitado(e.target.value)}
-    className="w-80 p-3 border rounded-lg"
-  />
-
-  {/* Error */}
-  {error && (
-    <p className="text-red-500 text-sm">{error}</p>
-  )}
-
-  {/* Botón */}
-  <button
-  onClick={enviarConfirmacion}
-  className="bg-[#9E8E7B] hover:bg-[#8a7a69] text-white px-6 py-3 rounded-full shadow-lg transition duration-300"
->
-  Enviar Confirmación
-</button>
-</motion.div>
+</div>
 
       </div>      
-    </div>
   );
 }
