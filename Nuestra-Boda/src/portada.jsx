@@ -40,7 +40,7 @@ export default function Portada() {
 
         {/* IMAGEN (SOLO FADE) */}
         <motion.img
-          src="/invitacion-03.jpg"
+          src="/prueba-03.jpg"
           alt="portada"
           className="w-full h-auto object-contain"
           initial={{ opacity: 0 }}
@@ -75,7 +75,7 @@ export default function Portada() {
             SE CASAN
           </p>
 
-          <div className="pt-14">
+          <div className="pt-5">
             <Countdown targetDate="2026-06-11T00:00:00" />
           </div>
         </motion.div>
