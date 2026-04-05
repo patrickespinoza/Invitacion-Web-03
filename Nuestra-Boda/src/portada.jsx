@@ -40,7 +40,7 @@ export default function Portada() {
 
         {/* IMAGEN (SOLO FADE) */}
         <motion.img
-          src="/invitacion-03.avif"
+          src="/invitacion-03.jpg"
           alt="portada"
           className="w-full h-auto object-contain"
           initial={{ opacity: 0 }}
