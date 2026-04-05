@@ -40,7 +40,7 @@ export default function Portada() {
 
         {/* IMAGEN (SOLO FADE) */}
         <motion.img
-          src="/vistaprevia02.avif"
+          src="/invitacion-03.avif"
           alt="portada"
           className="w-full h-auto object-contain"
           initial={{ opacity: 0 }}
@@ -68,14 +68,14 @@ export default function Portada() {
           </p>
 
           <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-cursiveDancing">
-            Allison & David
+            Maria & Jonathan
           </h1>
 
           <p className="text-sm sm:text-lg md:text-2xl lg:text-3xl tracking-widest">
             SE CASAN
           </p>
 
-          <div className="pt-4">
+          <div className="pt-14">
             <Countdown targetDate="2026-06-11T00:00:00" />
           </div>
         </motion.div>
