@@ -76,7 +76,7 @@ export default function Portada() {
           </p>
 
           <div className="pt-5">
-            <Countdown targetDate="2026-06-11T00:00:00" />
+            <Countdown targetDate="2027-06-11T00:00:00" />
           </div>
         </motion.div>
       </div>
