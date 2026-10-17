@@ -1,8 +1,24 @@
-// ImagenSeparacion.jsx
 
 import React from "react";
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
+
+// ==========================================
+// CONFIGURACIÓN DE LA IMAGEN
+// ==========================================
+
+const imagenConfig = {
+  src: "/finalboda.webp",
+
+  // Posición horizontal y vertical
+  // 50% 50% = centro
+  // 50% 20% = parte superior
+  // 50% 80% = parte inferior
+
+  mobile: "50% 35%",
+  tablet: "50% 45%",
+  desktop: "50% 20%",
+};
 
 const fadeUp = {
   hidden: {
@@ -30,11 +46,12 @@ export default function ImagenSeparacion() {
     >
       {/* CONTENEDOR DE LA FOTOGRAFÍA */}
       <div className="relative min-h-[620px] w-full overflow-hidden sm:min-h-[720px] md:min-h-[820px]">
-        {/* IMAGEN */}
+
+        {/* IMAGEN CON POSICIÓN PERSONALIZABLE */}
         <motion.img
-          src="/finalboda.webp"
+          src={imagenConfig.src}
           alt="María y Jonathan celebrando su boda"
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="imagen-separacion absolute inset-0 h-full w-full object-cover"
           initial={{ scale: 1.08 }}
           whileInView={{ scale: 1 }}
           viewport={{ once: true }}
@@ -43,6 +60,26 @@ export default function ImagenSeparacion() {
             ease: [0.22, 1, 0.36, 1],
           }}
         />
+
+        <style>
+          {`
+            .imagen-separacion {
+              object-position: ${imagenConfig.mobile};
+            }
+
+            @media (min-width: 640px) {
+              .imagen-separacion {
+                object-position: ${imagenConfig.tablet};
+              }
+            }
+
+            @media (min-width: 1024px) {
+              .imagen-separacion {
+                object-position: ${imagenConfig.desktop};
+              }
+            }
+          `}
+        </style>
 
         {/* VELOS EDITORIALES */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#433A34]/65 via-[#433A34]/10 to-[#433A34]/15" />

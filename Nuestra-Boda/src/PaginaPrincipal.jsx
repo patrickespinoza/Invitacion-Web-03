@@ -1,47 +1,51 @@
-import React from "react";
+
+import React, { useState } from "react";
+
+import Portada from "./portada";
 import Carousel from "./componentes-encabezado/carrusel";
 import Itinerario from "./componentes-encabezado/Itinerario";
-import Preguntas from "./componentes-encabezado/Preguntas";
 import Regalos from "./componentes-encabezado/Regalos";
 import Confirmacion from "./componentes-encabezado/Confirmacion";
-import Frase from "./componentes-encabezado/Frase";
 import DireccionEvento from "./componentes-encabezado/Ubicacion";
 import NuestraHistoria from "./componentes-encabezado/Galeria";
-import FraseBiblica from "./componentes-encabezado/Frasefinal";
 import Vestimenta from "./componentes-encabezado/vestimenta";
 import AlbumCompartido from "./componentes-encabezado/album";
 import ImagenSeparacion from "./componentes-encabezado/imagenseparacion";
-
+import Musica from "./componentes-encabezado/musica";
+import Padres from "./componentes-encabezado/Padres";
 
 export default function PaginaPrincipal() {
-
+  const [mostrarContenido, setMostrarContenido] =
+    useState(false);
 
   return (
-    <div >
+    <div>
+      {/* MÚSICA INDEPENDIENTE */}
+      <Musica
+        onContinuar={() => setMostrarContenido(true)}
+      />
 
-  <Frase/>
+      {/* PORTADA ORIGINAL */}
+      <Portada mostrarContenido={mostrarContenido} />
 
-  <DireccionEvento/>
+      <Padres/>
 
-  <NuestraHistoria/>
+      {/* RESTO DE LA INVITACIÓN */}
+      <DireccionEvento />
 
-  <Itinerario />
-  
-  <FraseBiblica/>
+      <NuestraHistoria />
 
-  <Vestimenta/>
+      <Itinerario />
 
-  <AlbumCompartido/>
+      <Vestimenta />
 
-  <Preguntas/>
-  
-  <Regalos/>
+      <AlbumCompartido />
 
-  <ImagenSeparacion/>
-  
-  <Confirmacion/>
-  
+      <Regalos />
 
-      </div>      
+      <Confirmacion />
+
+      <ImagenSeparacion />
+    </div>
   );
 }

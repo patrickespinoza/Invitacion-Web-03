@@ -1,37 +1,12 @@
-import React, { useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  ChevronDown,
-  Music2,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
+
+import React from "react";
+import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import Countdown from "./componentes-encabezado/encabeza-cuenta";
 
-export default function Portada() {
-  const audioRef = useRef(null);
-
-  const [mostrarModal, setMostrarModal] = useState(true);
-  const [mostrarContenido, setMostrarContenido] = useState(false);
-
-  const iniciarExperiencia = async (conSonido) => {
-    const audio = audioRef.current;
-
-    if (audio) {
-      audio.muted = !conSonido;
-      audio.volume = 0.45;
-
-      try {
-        await audio.play();
-      } catch (error) {
-        console.warn("No fue posible reproducir el audio:", error);
-      }
-    }
-
-    setMostrarModal(false);
-    setMostrarContenido(true);
-  };
-
+export default function Portada({
+  mostrarContenido = false,
+}) {
   const bajarContenido = () => {
     window.scrollTo({
       top: window.innerHeight,
@@ -50,11 +25,6 @@ export default function Portada() {
         text-white
       "
     >
-      {/* AUDIO */}
-      <audio ref={audioRef} loop preload="auto">
-        <source src="/TylerShaw.mp3" type="audio/mpeg" />
-      </audio>
-
       {/* IMAGEN PRINCIPAL */}
       <motion.img
         src="/portada.png"
@@ -214,8 +184,6 @@ export default function Portada() {
             items-center
           "
         >
-
-
           {/* NOMBRES */}
           <motion.h1
             className="
@@ -272,7 +240,6 @@ export default function Portada() {
 
             Jonathan
           </motion.h1>
-
 
           {/* CUENTA REGRESIVA */}
           <motion.div
@@ -377,324 +344,13 @@ export default function Portada() {
               },
             }}
           >
-            <ChevronDown size={18} strokeWidth={1.5} />
+            <ChevronDown
+              size={18}
+              strokeWidth={1.5}
+            />
           </motion.button>
         </div>
       </motion.div>
-
-      {/* INDICADOR DE MÚSICA */}
-      {!mostrarModal && (
-        <motion.div
-          className="
-            absolute
-            left-7
-            top-7
-            z-30
-            flex
-            items-center
-            gap-3
-            md:left-12
-            md:top-12
-          "
-          initial={{
-            opacity: 0,
-            x: -20,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-          transition={{
-            duration: 0.8,
-            delay: 0.5,
-          }}
-        >
-          <div
-            className="
-              flex
-              h-10
-              w-10
-              items-center
-              justify-center
-              rounded-full
-              border
-              border-white/40
-              bg-black/15
-              text-white
-              shadow-md
-              backdrop-blur-md
-            "
-          >
-            <Music2 size={16} strokeWidth={1.5} />
-          </div>
-
-          <p
-            className="
-              hidden
-              text-[9px]
-              uppercase
-              tracking-[0.35em]
-              text-white
-              drop-shadow-md
-              sm:block
-            "
-          >
-            Nuestra canción
-          </p>
-        </motion.div>
-      )}
-
-      {/* MODAL DE MÚSICA */}
-      <AnimatePresence>
-        {mostrarModal && (
-          <motion.div
-            className="
-              fixed
-              inset-0
-              z-50
-              flex
-              items-center
-              justify-center
-              bg-black/55
-              px-5
-              backdrop-blur-[10px]
-            "
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-            transition={{
-              duration: 0.45,
-            }}
-          >
-            <motion.div
-              className="
-                relative
-                w-full
-                max-w-[390px]
-                overflow-hidden
-                border
-                border-[#C7A46A]/40
-                bg-[#F8F5F0]
-                px-7
-                py-9
-                text-center
-                shadow-[0_30px_100px_rgba(0,0,0,0.4)]
-                sm:px-9
-              "
-              initial={{
-                opacity: 0,
-                y: 28,
-                scale: 0.96,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                scale: 1,
-              }}
-              exit={{
-                opacity: 0,
-                y: 20,
-                scale: 0.97,
-              }}
-              transition={{
-                duration: 0.55,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              <div
-                className="
-                  pointer-events-none
-                  absolute
-                  inset-2
-                  border
-                  border-[#B89B5E]/15
-                "
-              />
-
-              <div
-                className="
-                  absolute
-                  left-1/2
-                  top-0
-                  h-px
-                  w-32
-                  -translate-x-1/2
-                  bg-gradient-to-r
-                  from-transparent
-                  via-[#B89B5E]
-                  to-transparent
-                "
-              />
-
-              <div className="relative">
-                <div
-                  className="
-                    mx-auto
-                    flex
-                    h-14
-                    w-14
-                    items-center
-                    justify-center
-                    rounded-full
-                    border
-                    border-[#B89B5E]/45
-                    bg-[#F3EEE6]
-                    shadow-sm
-                  "
-                >
-                  <Music2
-                    size={21}
-                    strokeWidth={1.4}
-                    className="text-[#B89B5E]"
-                  />
-                </div>
-
-                <p
-                  className="
-                    mt-6
-                    text-[9px]
-                    uppercase
-                    tracking-[0.45em]
-                    text-[#9E8E7B]
-                  "
-                >
-                  Bienvenidos
-                </p>
-
-                <h2
-                  className="
-                    mt-3
-                    font-serif
-                    text-[1.7rem]
-                    font-normal
-                    leading-tight
-                    text-[#3F352E]
-                  "
-                >
-                  Una experiencia
-
-                  <span
-                    className="
-                      block
-                      italic
-                      text-[#8F7D68]
-                    "
-                  >
-                    acompañada de música
-                  </span>
-                </h2>
-
-                <div
-                  className="
-                    mx-auto
-                    mt-5
-                    h-px
-                    w-16
-                    bg-[#C7A46A]/60
-                  "
-                />
-
-                <p
-                  className="
-                    mx-auto
-                    mt-5
-                    max-w-[270px]
-                    text-sm
-                    leading-6
-                    text-[#6D5E52]
-                  "
-                >
-                  Elige cómo deseas disfrutar esta invitación.
-                </p>
-
-                <div className="mt-8 flex flex-col gap-3">
-                  <button
-                    type="button"
-                    onClick={() => iniciarExperiencia(true)}
-                    className="
-                      group
-                      flex
-                      w-full
-                      items-center
-                      justify-center
-                      gap-3
-                      bg-[#8F7D68]
-                      px-5
-                      py-3.5
-                      text-[10px]
-                      uppercase
-                      tracking-[0.24em]
-                      text-white
-                      shadow-[0_10px_25px_rgba(109,94,82,0.18)]
-                      transition
-                      duration-300
-                      hover:bg-[#756453]
-                    "
-                  >
-                    <Volume2
-                      size={15}
-                      strokeWidth={1.5}
-                      className="transition group-hover:scale-110"
-                    />
-
-                    Activar sonido
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => iniciarExperiencia(false)}
-                    className="
-                      group
-                      flex
-                      w-full
-                      items-center
-                      justify-center
-                      gap-3
-                      border
-                      border-[#B8A999]/70
-                      px-5
-                      py-3.5
-                      text-[10px]
-                      uppercase
-                      tracking-[0.24em]
-                      text-[#6D5E52]
-                      transition
-                      duration-300
-                      hover:bg-[#EFE6DA]
-                    "
-                  >
-                    <VolumeX
-                      size={15}
-                      strokeWidth={1.5}
-                      className="transition group-hover:scale-110"
-                    />
-
-                    Continuar en silencio
-                  </button>
-                </div>
-
-                <p
-                  className="
-                    mt-6
-                    font-serif
-                    text-xs
-                    italic
-                    text-[#9E8E7B]
-                  "
-                >
-                  María & Jonathan
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

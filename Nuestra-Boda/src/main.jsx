@@ -1,14 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import './index.css'
-import Portada from './portada'
-import PaginaPrincipal from './PaginaPrincipal'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <main>
-    <div >
-      <Portada/>
-      <PaginaPrincipal/>
-    </div>
-  </main>
-)
+import React from "react";
+import ReactDOM from "react-dom/client";
+import PaginaPrincipal from "./PaginaPrincipal";
+import "./index.css";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <PaginaPrincipal />
+  </React.StrictMode>
+);
